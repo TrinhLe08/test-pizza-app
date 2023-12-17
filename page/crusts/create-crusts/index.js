@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { CrustsApi } from '../../../apis/crust-api';
+import { useRecoilState } from 'recoil';
+import { recoilRouter } from '../../../recoil/router.recoil';
 
 const CreateCrustsPage = () => {
   const [value, setvalue] = useState('');
@@ -8,6 +10,7 @@ const CreateCrustsPage = () => {
   const [name_v, setName_v] = useState('');
   const [description, setDescription] = useState('');
   const [description_v, setDescription_v] = useState('');
+  const [_, setRouter] = useRecoilState(recoilRouter.router)
 
   const createCrusts = async () => {
     const informationToCreateCrusts = {
@@ -27,6 +30,9 @@ const CreateCrustsPage = () => {
 
   return (
     <View style={styles.container}>
+       <TouchableOpacity onPress={() => setRouter('crusts-list')}>
+                  <Text style ={{textDecorationLine: 'underline'}}>{'<--'} Back</Text>
+       </TouchableOpacity>
      <Text style={{fontSize: 25}}>Create Crusts :</Text>
            <View>
         <Text>Value:</Text>

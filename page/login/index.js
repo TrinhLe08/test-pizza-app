@@ -3,11 +3,14 @@ import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity, Image } fr
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loginApi } from '../../apis/login-api';
 import { usersApi } from '../../apis/user-api';
+import { useRecoilState } from 'recoil';
+import { recoilRouter } from '../../recoil/router.recoil';
 
 const LoginPage = () => {
   const [userName, setUserName]= useState('');
   const [userPassword, setUserPassword] = useState('');
   const [myInformation, setMyInformation] = useState({})
+  const [_, setRouter] = useRecoilState(recoilRouter.router)
 
   const loginUser = async () => {
    try {
@@ -24,6 +27,7 @@ const LoginPage = () => {
         await AsyncStorage.setItem('authorization', Login.data.authorization);
         const myInformation = await usersApi.myInformation()
         setMyInformation(myInformation.data)
+        setRouter('users-list')
       } else {
         return
       }

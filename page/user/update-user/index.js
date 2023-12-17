@@ -1,27 +1,28 @@
 import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { usersApi } from '../../../apis/user-api';
+import { recoilRouter } from '../../../recoil/router.recoil';
+import { recoilUser } from '../../../recoil/user.recoil';
 
 const UpdateUserPage = () => {
-  const [name, setName] = useState('John Doe');
-  const [birthday, setBirthday] = useState('01/01/2000');
-  const [address, setAddress] = useState('123 Nguyen Van Linh Street');
-  const [mobile, setMobile] = useState('0912345678');
-  const [ward, setWard] = useState('Ward 13');
-  const [district, setDistrict] = useState('District 1');
-  const [city, setCity] = useState('Ho Chi Minh City');
+  const informationUser = useRecoilValue(recoilUser.informationToUpdateUser)
+  const [name, setName] = useState(informationUser.name);
+  const [birthday, setBirthday] = useState(informationUser.birthday);
+  const [address, setAddress] = useState(informationUser.address);
+  const [mobile, setMobile] = useState(informationUser.mobile);
+  const [ward, setWard] = useState(informationUser.ward);
+  const [district, setDistrict] = useState(informationUser.district);
+  const [city, setCity] = useState(informationUser.city);
   const [password, setPassword] = useState('********');
   const [amount, setAmount] = useState('100000');
-
-  // test state 
-  const [informationUser, setInformationUser] = useState({})
+  const [_, setRouter] = useRecoilState(recoilRouter.router)
 
   const handleChangeInfo = async () => {
     const dataToUpdate = { name, birthday, address, mobile, district, ward, city };
     try {
-      const update = await usersApi.updateUsers(dataToUpdate)
-      console.log(update);
-      setInformationUser(update.data)
+      await usersApi.updateUsers(dataToUpdate)
+      setRouter('users-list')
     } catch (err) {
       console.log(err);
       return
@@ -30,6 +31,9 @@ const UpdateUserPage = () => {
 
   return (
     <View style={styles.container}>
+       <TouchableOpacity onPress={() => setRouter('users-list')}>
+                  <Text style ={{textDecorationLine: 'underline'}}>{'<--'} Back</Text>
+       </TouchableOpacity>
        <Text style={{fontSize: 25}}>Update user:</Text>
       <Text style={styles.label}>Name:</Text>
       <TextInput

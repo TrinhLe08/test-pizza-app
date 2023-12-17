@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity, FlatList, Image } from 'react-native'; 
 import { ToppingsApi } from '../../../apis/topping-api';
+import { useRecoilState } from 'recoil';
+import { recoilRouter } from '../../../recoil/router.recoil';
 
 const ToppingsPage = () => {
     const [allToppings, setAllToppings] = useState([])
+    const [_, setRouter] = useRecoilState(recoilRouter.router)
     useEffect(() => {
         const dataAllToppings = async () => { 
             try {
@@ -31,7 +34,7 @@ const ToppingsPage = () => {
         <View style = {styles.container}>
           <View style={styles.itemHeader}>
             <Text>Toppings list :</Text>
-              <TouchableOpacity >
+              <TouchableOpacity onPress={() => setRouter('create-topping')}>
                   <Text style ={{textDecorationLine: 'underline'}}>Create +</Text>
                </TouchableOpacity>
             </View>
@@ -43,9 +46,13 @@ const ToppingsPage = () => {
                data={allToppings}
                style={{marginBottom: 500}}
                renderItem={({ item }) => (
-            <View style={styles.itemData}>
+            <View  style={{ flex: 1, flexDirection: 'row',}} >
+                   <TouchableOpacity onPress={() => setRouter('update-categories')}>
+                    <View style={styles.itemData}>         
               <Text style={styles.contentName}>{item.name}</Text>
               <Text style={styles.contentDescription}>{item.slug}</Text>
+                    </View>
+                   </TouchableOpacity>
               <TouchableOpacity >
                   <Text style ={{textDecorationLine: 'underline', marginLeft: 10, color: 'red'}} onPress={() => DeleteToppings(item._id)}>Delete</Text>
                </TouchableOpacity>

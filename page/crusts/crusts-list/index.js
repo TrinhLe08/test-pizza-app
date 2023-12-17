@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity, FlatList, Image } from 'react-native'; 
 import { CrustsApi } from '../../../apis/crust-api';
+import { useRecoilState } from 'recoil';
+import { recoilRouter } from '../../../recoil/router.recoil';
 
 const CrustsPage = () => {
     const [allCrusts, setAllCrusts] = useState([])
+    const [_, setRouter] = useRecoilState(recoilRouter.router)
     useEffect(() => {
         const dataAllCrusts = async () => { 
             try {
@@ -31,7 +34,7 @@ const CrustsPage = () => {
         <View style = {styles.container}>
           <View style={styles.itemHeader}>
             <Text>Crusts list :</Text>
-              <TouchableOpacity >
+              <TouchableOpacity  onPress={() => setRouter('create-crusts')}>
                   <Text style ={{textDecorationLine: 'underline'}}>Create +</Text>
                </TouchableOpacity>
             </View>
@@ -43,9 +46,13 @@ const CrustsPage = () => {
                data={allCrusts}
                style={{marginBottom: 500}}
                renderItem={({ item }) => (
-            <View style={styles.itemData}>
+            <View style={{ flex: 1, flexDirection: 'row',}} >
+                   <TouchableOpacity onPress={() => setRouter('update-crusts')}>
+                    <View style={styles.itemData}  >
               <Text style={styles.contentName}>{item.name}</Text>
               <Text style={styles.contentDescription}>{item.value}</Text>
+                    </View>
+                   </TouchableOpacity>
               <TouchableOpacity >
                   <Text style ={{textDecorationLine: 'underline', marginLeft: 10, color: 'red'}} onPress={() => DeleteCrusts(item._id)}>Delete</Text>
                </TouchableOpacity>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { useRecoilState } from 'recoil';
 import { categoriesApi } from '../../../apis/categories-api';
+import { recoilRouter } from '../../../recoil/router.recoil';
 
 const CreateCategoriesPage = () => {
   const [slug, setSlug] = useState('');
@@ -8,12 +10,12 @@ const CreateCategoriesPage = () => {
   const [name_v, setName_v] = useState('');
   const [description, setDescription] = useState('');
   const [description_v, setDescription_v] = useState('');
+  const [_, setRouter] = useRecoilState(recoilRouter.router)
 
   const createCategories = async () => {
     const informationToCreateCategories = {
         slug, name, name_v, description, description_v, active: true, order_by: '0',
     }
-
     console.log(informationToCreateCategories);
     try {
         const create = await categoriesApi.createCategories(informationToCreateCategories)
@@ -27,6 +29,9 @@ const CreateCategoriesPage = () => {
 
   return (
     <View style={styles.container}>
+       <TouchableOpacity onPress={() => setRouter('categories-list')}>
+                  <Text style ={{textDecorationLine: 'underline'}}>{'<--'} Back</Text>
+       </TouchableOpacity>
      <Text style={{fontSize: 25}}>Create categories :</Text>
            <View>
         <Text>Slug:</Text>

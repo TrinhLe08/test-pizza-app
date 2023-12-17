@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { ToppingsApi } from '../../../apis/topping-api';
+import { useRecoilState } from 'recoil';
+import { recoilRouter } from '../../../recoil/router.recoil';
+
 const CreateToppingsPage = () => {
   const [value, setvalue] = useState('');
   const [name, setName] = useState('');
   const [name_v, setName_v] = useState('');
   const [description, setDescription] = useState('');
   const [description_v, setDescription_v] = useState('');
+  const [_, setRouter] = useRecoilState(recoilRouter.router)
 
   const createToppings = async () => {
     const informationToCreateToppings = {
@@ -26,6 +30,9 @@ const CreateToppingsPage = () => {
 
   return (
     <View style={styles.container}>
+         <TouchableOpacity onPress={() => setRouter('topping-list')}>
+                  <Text style ={{textDecorationLine: 'underline'}}>{'<--'} Back</Text>
+       </TouchableOpacity>
      <Text style={{fontSize: 25}}>Create Toppings :</Text>
            <View>
         <Text>Value:</Text>

@@ -1,6 +1,8 @@
 import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 import { CrustsApi } from '../../../apis/crust-api';
+import { useRecoilState } from 'recoil';
+import { recoilRouter } from '../../../recoil/router.recoil';
 
 const UpdateCrustsPage = () => {
   const [value, setvalue] = useState('sweet-soup');
@@ -10,6 +12,7 @@ const UpdateCrustsPage = () => {
   const [description_v, setDescription_v] = useState('Mô tả của thể loại');
   const [order_by, setorder_by] = useState(0);
   const [informationUser, setInformationCrusts] = useState({})
+  const [_, setRouter] = useRecoilState(recoilRouter.router)
 
   const handleChangeUpdate = async () => {
     const dataToUpdate = { value, name, name_v, description, description_v, order_by, active: true };
@@ -26,6 +29,9 @@ const UpdateCrustsPage = () => {
 
   return (
     <View style={styles.container}>
+       <TouchableOpacity onPress={() => setRouter('crusts-list')}>
+                  <Text style ={{textDecorationLine: 'underline'}}>{'<--'} Back</Text>
+       </TouchableOpacity>
        <Text style={{fontSize: 25}}>Update Crusts:</Text>
              <Text style={styles.label}>Value:</Text>
       <TextInput

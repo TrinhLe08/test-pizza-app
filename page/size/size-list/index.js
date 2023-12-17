@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity, FlatList, Image } from 'react-native'; 
 import { SizesApi } from '../../../apis/size-api';
+import { useRecoilState } from 'recoil';
+import { recoilRouter } from '../../../recoil/router.recoil';
 
 const SizesPage = () => {
     const [allSizes, setAllSizes] = useState([])
+    const [_, setRouter] = useRecoilState(recoilRouter.router)
+
     useEffect(() => {
         const dataAllSizes = async () => { 
             try {
@@ -31,7 +35,7 @@ const SizesPage = () => {
         <View style = {styles.container}>
           <View style={styles.itemHeader}>
             <Text>Sizes list :</Text>
-              <TouchableOpacity >
+              <TouchableOpacity onPress={() => setRouter('create-sizes')}>
                   <Text style ={{textDecorationLine: 'underline'}}>Create +</Text>
                </TouchableOpacity>
             </View>
@@ -43,9 +47,13 @@ const SizesPage = () => {
                data={allSizes}
                style={{marginBottom: 500}}
                renderItem={({ item }) => (
-            <View style={styles.itemData}>
+            <View  style={{ flex: 1, flexDirection: 'row',}} >
+                   <TouchableOpacity onPress={() => setRouter('update-sizes')}>
+                    <View style={styles.itemData}>
               <Text style={styles.contentName}>{item.name}</Text>
               <Text style={styles.contentDescription}>{item.slug}</Text>
+                    </View>
+                   </TouchableOpacity>
               <TouchableOpacity >
                   <Text style ={{textDecorationLine: 'underline', marginLeft: 10, color: 'red'}} onPress={() => DeleteSizes(item._id)}>Delete</Text>
                </TouchableOpacity>

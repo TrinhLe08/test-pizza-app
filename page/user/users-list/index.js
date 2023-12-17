@@ -3,10 +3,15 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity, FlatList, Image } from 'react-native'; 
 import { usersApi } from '../../../apis/user-api';
 import { recoilUser } from '../../../recoil/user.recoil';
+import { recoilRouter } from '../../../recoil/router.recoil';
 
 const UserListPage = () => {
     const [allUser, setAllUser] = useState([])
     const [dataUser, setDataUser] = useRecoilState(recoilUser.informationToUpdateUser)
+    const [_, setRouter] = useRecoilState(recoilRouter.router)
+    const [informationUser, setInformationUser] = useRecoilState(recoilUser.informationToUpdateUser)
+
+
     useEffect(() => {
         const dataAllUser = async () => { 
             try {
@@ -34,7 +39,7 @@ const UserListPage = () => {
         <View style = {styles.container}>
           <View style={styles.itemHeader}>
             <Text>User list : </Text>
-              <TouchableOpacity >
+              <TouchableOpacity onPress={() => setRouter('create-user')}>
                   <Text style ={{textDecorationLine: 'underline'}}>Create +</Text>
                </TouchableOpacity>
             </View>
@@ -50,8 +55,8 @@ const UserListPage = () => {
                 <View style={{ flex: 1, flexDirection: 'row',}} >  
 
             <TouchableOpacity onPress={() => {
-                 setDataUser(item);
-                 console.log(dataUser);
+                 setRouter('update-user')
+                 setInformationUser(item)
                }}>
                         <View style={styles.itemData}>
                           <Text style={styles.contentName}>{item.name}</Text>

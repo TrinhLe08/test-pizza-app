@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { usersApi } from '../../../apis/user-api';
+import { useRecoilState } from 'recoil';
+import { recoilRouter } from '../../../recoil/router.recoil';
 
 const CreateUserPage = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
+  const [_, setRouter] = useRecoilState(recoilRouter.router)
 
   const createUser = async () => {
     const informationToCreateUsser = {
@@ -16,6 +19,7 @@ const CreateUserPage = () => {
     try {
         const create = await usersApi.createUser(informationToCreateUsser)
         console.log(create);
+        setRouter('users-list')
         return
     } catch (err) {
         console.log(err);
@@ -25,6 +29,9 @@ const CreateUserPage = () => {
 
   return (
     <View style={styles.container}>
+          <TouchableOpacity onPress={() => setRouter('users-list')}>
+                  <Text style ={{textDecorationLine: 'underline'}}>{'<--'} Back</Text>
+               </TouchableOpacity>
      <Text style={{fontSize: 25}}>Create user:</Text>
       <View>
         <Text>Name:</Text>

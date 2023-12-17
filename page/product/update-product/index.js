@@ -1,26 +1,36 @@
 import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { categoriesApi } from '../../../apis/categories-api';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { recoilProduct } from '../../../recoil/product.recoil';
+// import { ProductApi } from '../../../apis/Product-api';
 import { recoilRouter } from '../../../recoil/router.recoil';
 
-const UpdateCategoriesPage = () => {
-  const [slug, setSlug] = useState('sweet-soup');
-  const [name, setName] = useState('Sweet Soup');
-  const [name_v, setName_v] = useState('Chè');
-  const [description, setDescription] = useState('This is the description of the category');
-  const [description_v, setDescription_v] = useState('Mô tả của thể loại');
-  const [order_by, setorder_by] = useState(0);
-  const [informationUser, setInformationCategories] = useState({})
-  const [_, setRouter] = useRecoilState(recoilRouter.router)
-
+const UpdateProductPage = () => {
+  const [_,setRouter] = useRecoilState(recoilRouter.router)
+const valueProduct = useRecoilValue(recoilProduct.informationToUpdateProduct)
+const [name, setName] = useState('Seafood Pizza');
+const [name_vi, setName_vi] = useState('Pizza Hải Sản');
+const [slug, setSlug] = useState('seafood-pizza');
+const [imagePath, setImagePath] = useState('');
+const [description, setDescription] = useState('seafood, mushroom');
+const [description_vi, setDescription_vi] = useState('Mô tả của thể loại');
+const [basePrice, setBasePrice] = useState(100000);
+const [salePercent, setSalePercent] = useState(10);
+const [metaTitle, setMetaTitle] = useState('Seafood Pizza');
+const [metaDescription, setMetaDescription] = useState('This is the meta description of the product');
+const [metaKeywords, setMetaKeywords] = useState('This is the meta keywords of the product');
+const [active, setActive] = useState(true);
   const handleChangeUpdate = async () => {
-    const dataToUpdate = { slug, name, name_v, description, description_v, order_by, active: true };
+    const dataToUpdate = { slug, name, name_vi,
+       description, description_vi, base_price : basePrice, 
+       active: true, sale_percent: salePercent, meta_title: metaTitle, 
+       meta_description: metaDescription, meta_keywords: metaKeywords, 
+       options: valueProduct.options};
     console.log(dataToUpdate);
     try {
-      const update = await categoriesApi.updateCategories(dataToUpdate)
+      const update = await ProductApi.updateProduct(dataToUpdate)
       console.log(update);
-      setInformationCategories(update.data)
+      setInformationProduct(update.data)
     } catch (err) {
       console.log(err);
       return
@@ -29,10 +39,10 @@ const UpdateCategoriesPage = () => {
 
   return (
     <View style={styles.container}>
-       <TouchableOpacity onPress={() => setRouter('categories-list')}>
+       <TouchableOpacity onPress={() => setRouter('products-list')}>
                   <Text style ={{textDecorationLine: 'underline'}}>{'<--'} Back</Text>
        </TouchableOpacity>
-       <Text style={{fontSize: 25}}>Update categories:</Text>
+       <Text style={{fontSize: 25}}>Update products:</Text>
              <Text style={styles.label}>Slug:</Text>
       <TextInput
         style={styles.input}
@@ -52,11 +62,11 @@ const UpdateCategoriesPage = () => {
         autoCapitalize="words"
       />
 
-            <Text style={styles.label}>Name Vi:</Text>
+      <Text style={styles.label}>Name Vi:</Text>
       <TextInput
         style={styles.input}
-        value={name_v}
-        onChangeText={(text) => setName_v(text)}
+        value={name_vi}
+        onChangeText={(text) => setName_vi(text)}
         placeholder="Enter your name"
         placeholderTextColor="#888"
         autoCapitalize="words"
@@ -71,20 +81,47 @@ const UpdateCategoriesPage = () => {
         placeholderTextColor="#888"
       />
       
-      <Text style={styles.label}>Description :</Text>
+      <Text style={styles.label}>Description V:</Text>
       <TextInput
         style={styles.input}
-        value={description_v}
+        value={description_vi}
         onChangeText={(text) => setDescription_v(text)}
         placeholder="Enter your address"
         placeholderTextColor="#888"
       />
 
-      <Text style={styles.label}>Order by:</Text>
+      <Text style={styles.label}>Base price:</Text>
       <TextInput
         style={styles.input}
-        value={order_by}
-        onChangeText={(text) => setorder_by(text)}
+        value={basePrice}
+        onChangeText={(text) => setBasePrice(text)}
+        placeholder="Enter your address"
+        placeholderTextColor="#888"
+      />
+
+      <Text style={styles.label}>Sale percent:</Text>
+      <TextInput
+        style={styles.input}
+        value={salePercent}
+        onChangeText={(text) => setSalePercent(text)}
+        placeholder="Enter your address"
+        placeholderTextColor="#888"
+      />
+
+      <Text style={styles.label}>Meta Description:</Text>
+      <TextInput
+        style={styles.input}
+        value={metaDescription}
+        onChangeText={(text) => setMetaDescription(text)}
+        placeholder="Enter your address"
+        placeholderTextColor="#888"
+      />
+
+      <Text style={styles.label}>Meta Keywords:</Text>
+      <TextInput
+        style={styles.input}
+        value={metaKeywords}
+        onChangeText={(text) => setMetaKeywords(text)}
         placeholder="Enter your address"
         placeholderTextColor="#888"
       />
@@ -149,4 +186,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default UpdateCategoriesPage
+export default UpdateProductPage

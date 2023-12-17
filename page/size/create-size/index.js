@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { SizesApi } from '../../../apis/size-api';
+import { useRecoilState } from 'recoil';
+import { recoilRouter } from '../../../recoil/router.recoil';
 
 const CreateSizesPage = () => {
   const [value, setvalue] = useState('');
@@ -8,6 +10,7 @@ const CreateSizesPage = () => {
   const [name_v, setName_v] = useState('');
   const [description, setDescription] = useState('');
   const [description_v, setDescription_v] = useState('');
+  const [_, setRouter] = useRecoilState(recoilRouter.router)
 
   const createSizes = async () => {
     const informationToCreateSizes = {
@@ -26,6 +29,9 @@ const CreateSizesPage = () => {
 
   return (
     <View style={styles.container}>
+         <TouchableOpacity onPress={() => setRouter('sizes-list')}>
+                  <Text style ={{textDecorationLine: 'underline'}}>{'<--'} Back</Text>
+       </TouchableOpacity>
      <Text style={{fontSize: 25}}>Create Sizes :</Text>
            <View>
         <Text>Value:</Text>
